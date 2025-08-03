@@ -1,0 +1,15 @@
+# Ignore Python cache and virtual environments
+__pycache__/
+*.pyc
+*.pyo
+env/
+venv/
+
+# Ignore type stub files
+*.pyi
+
+# VS Code settings
+.vscode/
+
+# Mac system file
+.DS_Store
