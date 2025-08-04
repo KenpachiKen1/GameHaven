@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 import httpx
 from dotenv import load_dotenv
 import os
@@ -6,6 +7,21 @@ import json
 load_dotenv()
 
 app = FastAPI() #initializing my fast api app.
+
+origins = [
+    "http://localhost:3000",   # React Frontend
+    "http://127.0.0.1:3000",   # same frontend, different loopback
+    "http://localhost:8000",   #FastAPI dev backend
+    "http://127.0.0.1:8000"    #Same backend diff format
+]
+
+app.add_middleware( #setting up middleware for frontend to backend connection
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    allow_credentials=True
+)
 
 @app.get("/")
 def first_function():
