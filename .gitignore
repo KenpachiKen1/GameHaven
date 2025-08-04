@@ -5,6 +5,8 @@ __pycache__/
 env/
 venv/
 
+.env
+
 # Ignore type stub files
 *.pyi
 
