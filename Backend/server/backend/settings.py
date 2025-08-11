@@ -30,6 +30,8 @@ ALLOWED_HOSTS = []
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  
     "http://127.0.0.1:3000",  
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
 ] # CORS settings to allow requests from your frontend
 
 # Application definition
@@ -50,7 +52,8 @@ INSTALLED_APPS = [
 CORS_ALLOW_CREDENTIALS = True #for cookies
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware", # CORS middleware to handle cross-origin requests
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
