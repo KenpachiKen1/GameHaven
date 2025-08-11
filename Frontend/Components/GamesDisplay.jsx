@@ -26,8 +26,6 @@ function GamesDisplay() {
         }
     }
 
-//    filtered = ["name_original", "background_image", "released", "updated", "website", "platforms", "stores", "tags", "description_raw"] #The fields I want from the API response
-
     return (
         <form>
             <h1>This is Game Haven</h1>

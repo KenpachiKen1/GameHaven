@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 import os #the operating system, loading it in to access files on the laptop
 import json
 import requests
+from .models import *
+from django.utils import timezone
 load_dotenv()
 
 #Will add specificc error handling in future iterations.
@@ -39,5 +41,14 @@ def game_details(request, game_name: str):
     except Exception as e:
         return HttpResponse(str(e), status = 404)
     return JsonResponse(filtered, status = 200)
+
+def create_user(request, firstname: str, lastname: str, name: str, password: str, email: str):
+    try:
+        profile = User.objects.create_user(first_name = firstname, last_name = lastname, username= name, password = password, email = email)
+        profile.created_at(timezone.now) #setting the time the profile was created
+        profile.save() #saving it to the data base
+    except Exception as e:
+        return HttpResponse(str(e), status = 404)
+    return profile # Would return a profile instance and I'd have access to profile.username etc.
 
 #typically, at least for this project, helper functions shouldn't return any sort of http or json response!
