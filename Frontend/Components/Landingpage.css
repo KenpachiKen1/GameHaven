@@ -1,0 +1,57 @@
+.form-container {
+    background: rgba(255, 255, 255, 0.15); /* See-through */
+    backdrop-filter: blur(10px) saturate(150%);
+    -webkit-backdrop-filter: blur(10px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Frosted edge */
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  
+    /* Limit width so it looks nice */
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .form-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+  }
+  
+  .FormField {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem; /* spacing between fields */
+  }
+  
+  .FormLabel {
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+  }
+  
+  .FormMessage {
+    color: red;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem; /* space between error and input */
+  }
+  
+  .Input {
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .Radix-Button {
+    padding: 0.75rem 1.5rem;
+    background: crimson;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .Radix-Button:hover {
+    background: darkred;
+  }
+  

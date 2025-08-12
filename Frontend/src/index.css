@@ -9,6 +9,28 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --gradient-bg: linear-gradient(135deg, #08203e, #557c93);
+
+  /* Optional: give it a shiny/glossy look */
+  --gloss-overlay: linear-gradient(
+    rgba(255, 255, 255, 0.2), 
+    rgba(255, 255, 255, 0)
+  );
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+
+  background: 
+    var(--gloss-overlay),
+    var(--gradient-bg);
+
+  background-blend-mode: overlay;
+  background-size: cover;
+  background-attachment: fixed; /* Makes it stay in place when scrolling */
 }
 
 
