@@ -37,7 +37,7 @@ class User(AbstractUser):
     favorite_game = models.ForeignKey(Game, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return f"this is user: {self.username}, their password is {self.password}, their email is {self.email}"
+        return f"username: {self.username} password: {self.password}, email: {self.email}, first name: {self.first_name}, last name: {self.last_name}"
 
 
 #Later in development will add a friend system so will update models but as of right now this is what I will build upon.

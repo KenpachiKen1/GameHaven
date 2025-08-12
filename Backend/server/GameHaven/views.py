@@ -8,6 +8,7 @@ import json
 import requests
 from .models import *
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 load_dotenv()
 
 #Will add specificc error handling in future iterations.
@@ -42,13 +43,34 @@ def game_details(request, game_name: str):
         return HttpResponse(str(e), status = 404)
     return JsonResponse(filtered, status = 200)
 
-def create_user(request, firstname: str, lastname: str, name: str, password: str, email: str):
+@csrf_exempt
+def create_user(request):
     try:
-        profile = User.objects.create_user(first_name = firstname, last_name = lastname, username= name, password = password, email = email)
-        profile.created_at(timezone.now) #setting the time the profile was created
-        profile.save() #saving it to the data base
+        if(request.method != 'POST'):
+           return HttpResponse("This function is only for POST methods", status = 404) 
+    
+        data = json.loads(request.body)
+        firstname = data.get("firstName")
+        lastname = data.get("lastName")
+        email = data.get("email")
+        password = data.get("password")
+        username = data.get("userName")
+    
+        if not all([firstname, lastname, email, password, username]):
+            return HttpResponse("There are missing fields", status = 404) 
+    
+        profile = User.objects.create_user(first_name=firstname, last_name=lastname, email=email, password=password, username=username)
+        profile.created_at = timezone.now()
+        profile.save()
     except Exception as e:
         return HttpResponse(str(e), status = 404)
-    return profile # Would return a profile instance and I'd have access to profile.username etc.
+    
+    return JsonResponse({
+            "username": profile.username,
+            "firstName": profile.first_name,
+            "lastName": profile.last_name,
+            "email": profile.email,
+        }, status=201)
+     # Would return a profile instance and I'd have access to profile.username etc.
 
 #typically, at least for this project, helper functions shouldn't return any sort of http or json response!

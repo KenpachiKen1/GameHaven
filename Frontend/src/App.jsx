@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import GamesDisplay from '../Components/GamesDisplay'
 import LandingPage from '../Components/LandingPage'
+
 function App() {
   
   return (
