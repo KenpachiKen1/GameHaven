@@ -37,7 +37,6 @@ CORS_ALLOWED_ORIGINS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'GameHaven.apps.GamehavenConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,6 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     "corsheaders", # CORS headers for cross-origin requests
+    'users',
+    'games', 
 
 ]
 
@@ -94,7 +95,7 @@ DATABASES = {
 }
 
 #Defining user models
-AUTH_USER_MODEL = 'GameHaven.User'
+AUTH_USER_MODEL = 'users.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

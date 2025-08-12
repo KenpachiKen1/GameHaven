@@ -19,6 +19,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('GameHaven.urls')),  # Include GameHaven app's URLs, needed for the root of the project to point to the GameHaven app
+    path('users/', include('users.urls')),
+    path('games/', include('games.urls')),
 
 ]

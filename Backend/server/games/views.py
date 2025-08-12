@@ -1,3 +1,4 @@
+
 from django.shortcuts import render
 # Create your views here.
 from django.http import HttpResponse, request, response, JsonResponse
@@ -24,25 +25,43 @@ def game_search(game: str):
        response = requests.get(url) 
        data = response.json()
        slug = data["results"][0]["slug"] #accessing the first slug from the returned list
+       name = data["results"][0]["name"]#getting the first game name
+       
     except Exception as e:
-         raise Exception(f"Error in game_search: {e}")  # Raise a proper exception
-    return slug
+         raise Exception(f"Error in game_search: {e}") 
+    return {"slug":slug, "name": name}
 
 #This function is used for pulling game data from the given slug.
 def game_details(request, game_name: str):
-    needed = ["name_original", "background_image", "released", "updated", "website", "platforms", "stores", "tags", "description_raw"] #The fields I want from the API response
     try:
-        slug = game_search(game_name) #getting the slug from the game search, only doing this because I don't know how to find the slug ann easier way.
+        #You need to add the game to the database if it doesn't exist, so I will first search for the game slug.
+        details = game_search(game_name) #getting the slug from the game search
+        slug = details.get("slug") #getting slug for the API call if needed
+        title = details.get("name") #getting the title to check if the game exists or not
+        
+         #checks to see if the game with the title exists, if it does i'll return a json with our game details instead of making another API call
+        if Game.objects.filter(name=title).exists():
+            game = Game.objects.get(name=title)
+            info = {
+                "name_original": game.name,
+                "background_image" : game.game_image,
+                "released" : game.released,
+                "website":game.website,
+                "description": game.description
+            }
+            return JsonResponse(info, status=200)
+        
+        #this section of code should only run if it's not already in the database
         GH = os.getenv("GH_KEY")
         url = f"https://api.rawg.io/api/games/{slug}?key={GH}"
         response  = requests.get(url)
         data = response.json()
 
+        #The fields I want from the API response
+        needed = ["name_original","background_image", "released", "updated", "website", "platforms", "stores", "tags", "description_raw"] 
         filtered = {key: data[key] for key in needed if key in data} #if the key is in filtered and the key is in data, add it to the filtered list
-        try:
-            if Game.objects.filter(name=filtered.get("name_original")).exists():
-                return JsonResponse(filtered, status=200) #no need to add the game since it is already there.     
-            else:
+        try:    
+                print("adding to DB") #keeping this check here for now
                 add_game_to_DB(filtered) # if it doesn't exist, add it to the database.
         except Exception as e:
             print(str(e))
@@ -76,35 +95,3 @@ def add_game_to_DB(game_details: dict) -> bool:
     
     return True
 
-
-@csrf_exempt
-def create_user(request):
-    try:
-        if(request.method != 'POST'):
-           return HttpResponse("This function is only for POST methods", status = 404) 
-    
-        data = json.loads(request.body)
-        firstname = data.get("firstName")
-        lastname = data.get("lastName")
-        email = data.get("email")
-        password = data.get("password")
-        username = data.get("userName")
-    
-        if not all([firstname, lastname, email, password, username]):
-            return HttpResponse("There are missing fields", status = 404) 
-    
-        profile = User.objects.create_user(first_name=firstname, last_name=lastname, email=email, password=password, username=username)
-        profile.created_at = timezone.now()
-        profile.save()
-    except Exception as e:
-        return HttpResponse(str(e), status = 404)
-    
-    return JsonResponse({
-            "username": profile.username,
-            "firstName": profile.first_name,
-            "lastName": profile.last_name,
-            "email": profile.email,
-        }, status=201)
-     # Would return a profile instance and I'd have access to profile.username etc.
-
-#typically, at least for this project, helper functions shouldn't return any sort of http or json response!

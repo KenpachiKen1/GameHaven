@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
@@ -27,18 +26,3 @@ class Game(models.Model):
 
     def __str__(self):
         return f"Game: {self.name}, release date: {self.released}, \n description: {self.description}"
-
-class User(AbstractUser):
-    #Abstract user already has Username, and also has automatic password hashing.
-    profile_photo = models.ImageField(upload_to="Profile_Photos/", editable=True, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True) #for one the user is actually created
-    last_modified = models.DateTimeField(auto_now=True) #for whenever the user is updated
-    game_catalog = models.ImageField(upload_to="Games_List/", blank=True, null=True, editable=True)
-    favorite_game = models.ForeignKey(Game, on_delete=models.CASCADE, null=True, blank=True)
-
-    def __str__(self):
-        return f"username: {self.username} password: {self.password}, email: {self.email}, first name: {self.first_name}, last name: {self.last_name}"
-
-
-#Later in development will add a friend system so will update models but as of right now this is what I will build upon.
-

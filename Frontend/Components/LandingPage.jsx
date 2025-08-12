@@ -24,13 +24,11 @@ const createProfile = async(event) =>  {
     try{
         setError(false);
         setLoading(true);
-        const response = await fetch(`http://127.0.0.1:8000/create_user/`, {
+        const response = await fetch(`http://127.0.0.1:8000/users/create_user/`, {
             method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(form)
-        });
+        });        
         if (!response.ok){
             setError(true);
             throw new Error("failed to create account");
