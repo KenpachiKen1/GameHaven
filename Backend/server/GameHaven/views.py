@@ -10,7 +10,7 @@ from .models import *
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 load_dotenv()
-
+import datetime
 #Will add specificc error handling in future iterations.
 
 def index(request):
@@ -30,7 +30,7 @@ def game_search(game: str):
 
 #This function is used for pulling game data from the given slug.
 def game_details(request, game_name: str):
-    filtered = ["name_original", "background_image", "released", "updated", "website", "platforms", "stores", "tags", "description_raw"] #The fields I want from the API response
+    needed = ["name_original", "background_image", "released", "updated", "website", "platforms", "stores", "tags", "description_raw"] #The fields I want from the API response
     try:
         slug = game_search(game_name) #getting the slug from the game search, only doing this because I don't know how to find the slug ann easier way.
         GH = os.getenv("GH_KEY")
@@ -38,10 +38,44 @@ def game_details(request, game_name: str):
         response  = requests.get(url)
         data = response.json()
 
-        filtered = {key: data[key] for key in filtered if key in data} #if the key is in filtered and the key is in data, add it to the filtered list
+        filtered = {key: data[key] for key in needed if key in data} #if the key is in filtered and the key is in data, add it to the filtered list
+        try:
+            if Game.objects.filter(name=filtered.get("name_original")).exists():
+                return JsonResponse(filtered, status=200) #no need to add the game since it is already there.     
+            else:
+                add_game_to_DB(filtered) # if it doesn't exist, add it to the database.
+        except Exception as e:
+            print(str(e))
+            return HttpResponse(str(e), status = 404)
     except Exception as e:
         return HttpResponse(str(e), status = 404)
     return JsonResponse(filtered, status = 200)
+
+
+def add_game_to_DB(game_details: dict) -> bool:
+    try:
+        # Extracting the necessary fields from the game_details dictionary
+        title = game_details.get("name_original")
+        website = game_details.get("website")
+        released = None
+        description = game_details.get("description_raw")
+        if game_details.get("released"):
+            released = datetime.datetime.strptime(game_details.get("released"), "%Y-%m-%d").date()
+        image = game_details.get("background_image")
+        game = Game.objects.create(
+        name=title,
+        website=website,
+        released=released,
+        description=description,
+        game_image = image
+        
+    )
+        game.save()
+    except Exception as e:
+        raise Exception(f"Error: {str(e)}")
+    
+    return True
+
 
 @csrf_exempt
 def create_user(request):
