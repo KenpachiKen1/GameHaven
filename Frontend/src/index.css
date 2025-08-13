@@ -10,8 +10,17 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --gradient-bg: linear-gradient(135deg, #08203e, #557c93);
+  background: hsla(219, 72%, 37%, 1);
 
+  background: hsla(219, 80%, 24%, 1);
+
+  background: linear-gradient(135deg, hsla(219, 80%, 24%, 1) 30%, hsla(212, 47%, 49%, 1) 72%);
+  
+  background: -moz-linear-gradient(135deg, hsla(219, 80%, 24%, 1) 30%, hsla(212, 47%, 49%, 1) 72%);
+  
+  background: -webkit-linear-gradient(135deg, hsla(219, 80%, 24%, 1) 30%, hsla(212, 47%, 49%, 1) 72%);
+  
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#0C2F6F", endColorstr="#4279b6", GradientType=1 );
   /* Optional: give it a shiny/glossy look */
   --gloss-overlay: linear-gradient(
     rgba(255, 255, 255, 0.2), 
