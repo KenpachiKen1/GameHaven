@@ -20,6 +20,8 @@ def index(request):
 #writing my game_search functionality, this function should return the slug of the first game from a page that is returned
 def game_search(game: str): 
     try:
+       if(game == "Fortnite" or game == "fortnite"): #random hard code because saying fortnite alone will bring up an unrelated game
+           game = "Fortnite Battle Royale"
        GH = os.getenv("GH_KEY") #loading in RAWG API key.
        url = f"https://api.rawg.io/api/games?search={game}&search_exact=true&page=1&key={GH}"
        response = requests.get(url) 
