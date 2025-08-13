@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from "react";
+import React, { useState , useEffect, useRef } from "react";
 import "./LandingPage.css"; // 👈 make sure you create this
 import { Carousel, Tabs } from "antd";
 import { motion } from "framer-motion";
@@ -16,10 +16,15 @@ const LandingPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [profile, setProfile] = useState(null);
-
   const frames = [PixelHand, PixelHandTouching];
-
+  const carouselRef = useRef(null);
   const [frame, setFrame] = useState(0);
+
+  const goToNext = () => {
+    if (carouselRef.current) {
+      carouselRef.current.next();
+    }
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -80,7 +85,7 @@ const LandingPage = () => {
 
       <Form.Item>
       <Button type="primary" htmlType="submit" className="auth-button">
-          Create Profile!
+          Create Profile
     </Button>
       </Form.Item>
     </Form>
@@ -122,7 +127,7 @@ const LandingPage = () => {
 
       <Form.Item>
       <Button type="primary" htmlType="submit" className="auth-button">
-          Login!
+          Login
     </Button>
       </Form.Item>
     </Form>
@@ -205,15 +210,15 @@ const LandingPage = () => {
             <Title level={3} style={{ textAlign: "center" }}>
               Connect with your friends and share your gaming journey!
             </Title>
-            <Carousel arrows>
+            <Carousel arrows ref={carouselRef}>
               <div>
-                <video src={video1} controls style={{ width: "100%", height: "100%" }} />
+                <video src={video1} controls style={{ width: "100%", height: "100%" }}  onEnded={goToNext}/>
               </div>
               <div>
-                <video src={video2} controls style={{ width: "100%", height: "100%" }} />
+                <video src={video2} controls style={{ width: "100%", height: "100%" }} onEnded={goToNext}/>
               </div>
               <div>
-                <img src={screenshot} alt="Star Lord ranking" style={{ width: "100%", height: "100%" }} />
+                <img src={screenshot} alt="Star Lord ranking" style={{ width: "100%", height: "100%" }}  />
               </div>
             </Carousel>
             <Text style={{ display: "block", textAlign: "center", marginTop: 16, fontWeight: 'bold', fontSize: '25px'}}> Connect with friends, share clips, build communities</Text>
