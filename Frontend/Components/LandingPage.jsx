@@ -5,6 +5,9 @@ import { motion } from "framer-motion";
 import { Button, Form, Input, Typography } from "antd";
 import video1 from "../src/assets/video1.mp4";
 import video2 from "../src/assets/video2.mp4";
+import video3 from "../src/assets/video3.mp4";
+import video4 from "../src/assets/video4.mp4";
+
 import screenshot from "../src/assets/screenshot.jpeg";
 import PixelHand from "../src/assets/PixelHand.png";
 import PixelHandTouching from "../src/assets/PixelHandTouching.png";
@@ -216,6 +219,12 @@ const LandingPage = () => {
               </div>
               <div>
                 <video src={video2} controls style={{ width: "100%", height: "100%" }} onEnded={goToNext}/>
+              </div>
+              <div>
+                <video src={video3} controls style={{ width: "100%", height: "100%" }} onEnded={goToNext}/>
+              </div>
+              <div>
+                <video src={video4} controls style={{ width: "100%", height: "100%" }} onEnded={goToNext}/>
               </div>
               <div>
                 <img src={screenshot} alt="Star Lord ranking" style={{ width: "100%", height: "100%" }}  />
