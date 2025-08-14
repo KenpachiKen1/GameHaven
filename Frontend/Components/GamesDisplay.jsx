@@ -26,18 +26,41 @@ function GamesDisplay({games, setGames}) {
             const data = await response.json(); //setting it to a json
             console.log(data);
             setGames(data); //then setting the game field.
+            setGamesDisplay(data);
         }
         catch(err){
             setError(err.message);
         }
 
-        setGamesDisplay(games);
+      
     }
 
+    const updateFavoriteGame = async (game) => {
+        try{
+            setError(null)
+            setLoading(true)
+            const response = await fetch(`http://127.0.0.1:8000/games/game/user_favs/${game}/`, {
+                method: 'POST',
+                body: JSON.stringify({ user: "jackie" }) 
+                });
+            if(!response.ok){
+                setError(true);
+                throw new Error("failed to find your favorite game :(");
+            }
+            const data = await response.json()
+            setGames(data)
+            setGamesDisplay(data);
+        } catch (err){
+            setError(err.message)
+            console.log(error)
+        } finally {
+            setLoading(false);
+        }
+    };
     return (
         <div>
             <h2 style={{textAlign: 'center'}}>Search for your favorite game</h2>
-            <Input.Search placeholder='Search' variant='Outlined' onChange={e => setSearch(e.target.value)} onSearch={() => handleGameInfo(search)}  styles={{
+            <Input.Search placeholder='Search' variant='Outlined' onChange={e => setSearch(e.target.value)} onSearch={() => updateFavoriteGame(search)}  styles={{
         input: {
             backgroundColor: 'white',
             color: '#333',
@@ -64,7 +87,7 @@ function GamesDisplay({games, setGames}) {
                         height: '200px',
                         objectFit: 'cover',
                         borderRadius: '8px',
-                        marginBottom: '16px'
+                        marginBottom: '16px',
                     }}
                 />
                 <div style={{

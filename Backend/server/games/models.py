@@ -25,4 +25,4 @@ class Game(models.Model):
     tags = models.ManyToManyField(Tags, blank=True) #The Tags associated with each game
 
     def __str__(self):
-        return f"Game: {self.name}, release date: {self.released}, \n description: {self.description}"
+        return f"Game: {self.name}"

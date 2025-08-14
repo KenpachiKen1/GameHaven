@@ -70,6 +70,30 @@ def delete_user(request):
     except Exception as e:
         raise HttpResponse(str(e), status=400)
     
+@csrf_exempt
+def set_user_hours_platform(request):
+    try:
+        if request.method != 'POST': #at thisp point the fields I am changing should be null
+            return HttpResponse('This is only for initial user account set up', status=400)
+        data = json.loads(request.body) #loading in the user information/details.
+        user = User.objects.get(username = data["user"]) #here i have the user object.
+        user.avg_hours_week = data["hours"] #adding the new field
+        user.main_platform = data["platform"]
+        user.save()
+        #going to return the full user profile now that each field is entered.
+        info = {
+            "Favorite Game": user.favorite_game.__str__(),
+            "Main platform" : user.main_platform,
+            "Average Gaming Hours": user.avg_hours_week,
+        }
+        print(user.favorite_game.__str__())
+    except Exception as e:
+     return HttpResponse(str(e), status=400)
+    return JsonResponse(info, status=201)
+
+
+
+
 
 #Update User Function
 

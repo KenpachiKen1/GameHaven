@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import { Button, message, Steps, theme, Slider, Row, Col, InputNumber } from "antd";
 import GamesDisplay from '../Components/GamesDisplay'
+import { Card } from 'antd';
 const Questionnaire = () => {
-  const [Hours, setHours] = useState(1);
+  const [Hours, setHours] = useState(1); //also going to use this for updating the user's average hours
   const { token } = theme.useToken();
   const [current, setCurrent] = useState(0);
-
-  const [games, setGames] = useState(null);
+  const [userPlatform, setUserPlatform] = useState(null); //Users preferred platform, going to use this for updating the user model
+  const [games, setGames] = useState(null); 
   const next = () => setCurrent(current + 1);
   const prev = () => setCurrent(current - 1);
+  const [error, setError] = useState(null);
 
+  let chosenGame = games;
   message.config({
     top: 100, // distance from top of the window
     duration: 2, // seconds
@@ -23,9 +26,213 @@ const Questionnaire = () => {
   ];
 
   const handleChange = (value) => setHours(value);
-
   const getLevelByHours = (hours) => levels.find((level) => hours >= level.minHours && hours <= level.maxHours);
   const currLevel = getLevelByHours(Hours);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  
+  const confirmation = () => {
+    return (
+      
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1000,
+        padding: '20px'
+      }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '24px',
+          padding: '20px',
+          backgroundColor: 'white',
+          borderRadius: '16px',
+          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3)',
+          maxWidth: '500px',
+          width: '100%',
+          maxHeight: '90vh',
+          overflow: 'auto'
+        }}>
+          <Card 
+            title={
+              <span style={{
+                fontSize: '20px',
+                fontWeight: 'bold',
+                color: '#333',
+                textAlign: 'center',
+                display: 'block'
+              }}>
+                Is this correct?
+              </span>
+            }
+            hoverable 
+            style={{
+              width: '100%',
+              textAlign: 'left',
+              boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+              borderRadius: '16px',
+              border: '2px solid #e8e8e8'
+            }}
+            bodyStyle={{
+              padding: '32px',
+              fontSize: '16px',
+              lineHeight: '1.6'
+            }}
+          >
+            <h2 style={{
+              fontSize: '18px',
+              fontWeight: 'bold',
+              color: '#333',
+              marginBottom: '24px',
+              textAlign: 'center'
+            }}>
+              Here are your details:
+            </h2>
+            
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px'
+            }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                padding: '12px',
+                backgroundColor: '#f8f9fa',
+                borderRadius: '8px',
+                border: '1px solid #e9ecef'
+              }}>
+                
+                <span style={{ color: '#333', fontWeight: '500' }}>
+                  <strong>Gaming Hours:</strong> {Hours} hours per week
+                </span>
+              </div>
+              
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                padding: '12px',
+                backgroundColor: '#f8f9fa',
+                borderRadius: '8px',
+                border: '1px solid #e9ecef'
+              }}>
+                <span style={{ fontSize: '20px', marginRight: '12px' }}></span>
+                <span style={{ color: '#333', fontWeight: '500' }}>
+                  <strong>Main Platform:</strong> {userPlatform}
+                </span>
+              </div>
+              
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                padding: '12px',
+                backgroundColor: '#f8f9fa',
+                borderRadius: '8px',
+                border: '1px solid #e9ecef'
+              }}>
+                <span style={{ fontSize: '20px', marginRight: '12px' }}></span>
+                <span style={{ color: '#333', fontWeight: '500' }}>
+                  <strong>Favorite Game:</strong> {games?.name_original || 'Not selected'}
+                </span>
+              </div>
+            </div>
+          </Card>
+          <p style={{color:'black'}}>You can edit this information later</p>
+          <div style={{
+            display: 'flex',
+            gap: '16px',
+            justifyContent: 'center',
+            marginTop: '8px'
+          }}>
+            
+            <Button 
+              size="large"
+              onClick={() => {setShowConfirmation(false);}}
+              style={{
+                backgroundColor: '#ff4757',
+                borderColor: '#ff4757',
+                color: 'white',
+                fontWeight: 'bold',
+                fontSize: '16px',
+                padding: '12px 32px',
+                height: 'auto',
+                borderRadius: '8px',
+                boxShadow: '0 4px 12px rgba(255, 71, 87, 0.3)',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = '#ff3742';
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = '0 6px 16px rgba(255, 71, 87, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = '#ff4757';
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = '0 4px 12px rgba(255, 71, 87, 0.3)';
+              }}
+            > 
+              ❌ Cancel 
+            </Button>
+            
+            <Button 
+              size="large"
+              onClick={() => {setUserInfo(); setShowConfirmation(false);}}
+              style={{
+                backgroundColor: '#2ed573',
+                borderColor: '#2ed573',
+                color: 'white',
+                fontWeight: 'bold',
+                fontSize: '16px',
+                padding: '12px 32px',
+                height: 'auto',
+                borderRadius: '8px',
+                boxShadow: '0 4px 12px rgba(46, 213, 115, 0.3)',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = '#26d264';
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = '0 6px 16px rgba(46, 213, 115, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = '#2ed573';
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = '0 4px 12px rgba(46, 213, 115, 0.3)';
+              }}
+            > 
+              ✅ Confirm 
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const setUserInfo = async() => { 
+
+    try{
+      const response = await fetch (`http://127.0.0.1:8000/users/finish_user/`,{
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({"user": "jackie", "hours": Hours, "platform" : userPlatform }),
+      });
+
+      if(!response.ok){
+        setError("Failed to finish setting up user profile")
+      }
+
+    }catch(err){
+      setError(err.message)
+    }
+  }
+  
 
   const Platforms = () => {
     const [selectedPlatform, setSelectedPlatform] = useState(null);
@@ -41,6 +248,7 @@ const Questionnaire = () => {
     const handlePlatformClick = (platform) => {
       // If clicking the same platform, deselect it, otherwise select the new one
       setSelectedPlatform(selectedPlatform === platform ? null : platform);
+      setUserPlatform(platform);
     };
   
     return (
@@ -241,18 +449,19 @@ const Questionnaire = () => {
   };
 
   return (
-
-    <div style={containerStyle}>
-        <h3 style={{textAlign: 'center', color:'black'}}>Lets get to know you better</h3>
-      <Steps current={current} items={items} style={{ marginBottom: "20px" }} />
-      <div style={contentStyle}>{steps[current].content}</div>
-
-      <div style={{ marginTop: 24 }}>
-        {current < steps.length - 1 && <Button type="primary" onClick={next}>Next</Button>}
-        {current === steps.length - 1 &&<Button type="primary" onClick={() => {message.success("Thank you!"); }}>Complete</Button>}
-        {current > 0 && <Button style={{ margin: "0 8px" }} onClick={prev}>Previous</Button>}
+    <>
+      <div style={containerStyle}>
+          <h3 style={{textAlign: 'center', color:'black'}}>Lets get to know you better</h3>
+        <Steps current={current} items={items} style={{ marginBottom: "20px" }} />
+        <div style={contentStyle}>{steps[current].content}</div>
+        <div style={{ marginTop: 24 }}>
+          {current < steps.length - 1 && <Button type="primary" onClick={next}>Next</Button>}
+          {current === steps.length - 1 &&<Button type="primary" onClick={() => setShowConfirmation(true)}>Complete</Button>}
+          {current > 0 && <Button style={{ margin: "0 8px" }} onClick={prev}>Previous</Button>}
+        </div>
       </div>
-    </div>
+      {showConfirmation && confirmation()}
+    </>
   );
 };
 
