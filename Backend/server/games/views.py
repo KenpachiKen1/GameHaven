@@ -44,10 +44,10 @@ def set_fav_game(request, game_name: str):
     user_name = data["user"] # pulling the username
     user = User.objects.get(username=user_name) #Getting the user, should always work, by this point a user would have created their own account by now etc.
     try:
-        game_name = game_name.capitalize()
+        game_name = game_name.title()
         print("In the try block")
         if Game.objects.filter(name=game_name).exists(): #If the game exists...
-            print("After checking if the game exists")
+            print("the game exists")
             game = Game.objects.get(name=game_name) # get the game object
             print(game.name)
             user.favorite_game = game #update the users, favorite game with the game ID
@@ -61,7 +61,7 @@ def set_fav_game(request, game_name: str):
             }
 
         else: #Not in the database already 
-            print("its in the database already")
+            print("its not the database already")
             game_details(request, game_name) ##This will add the game to the db and also display it for use.
             print("after game deets")
             game = Game.objects.get(name=game_name) #now it should be in the database
@@ -92,7 +92,7 @@ def set_fav_game(request, game_name: str):
 def game_details(request, game_name: str):
     try:
         #You need to add the game to the database if it doesn't exist, so I will first search for the game slug.
-        game_name = game_name.capitalize()
+        game_name = game_name.title()
         details = game_search(game_name) #getting the slug from the game search
         slug = details.get("slug") #getting slug for the API call if needed
         title = details.get("name") #getting the title to check if the game exists or not

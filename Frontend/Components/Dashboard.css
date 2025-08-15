@@ -1,0 +1,207 @@
+/* Reset any conflicting styles */
+* {
+    box-sizing: border-box;
+}
+
+/* Sidebar Styles */
+.sider {
+    height: 100vh; 
+    position: fixed !important;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 100;
+    background: #fff !important;
+    border-right: 1px solid #f0f0f0;
+    overflow: hidden;
+}
+
+/* Header Styles */
+.header {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 25%, #3b6bb6 50%, #4a7bc8 75%, #5a8cd9 100%) !important;
+    background-size: 200% 200%;
+    animation: gradientShift 8s ease infinite;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 200px;
+    height: 64px;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(30, 60, 114, 0.3);
+    transition: left 0.3s ease;
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Sidebar Toggle Button */
+.trigger-btn {
+    font-size: 16px; 
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #f0f0f0;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.trigger-btn:hover {
+    background: #e6f7ff;
+    border-color: #91d5ff;
+    color: #1890ff;
+}
+
+/* Main Content Area */
+.content {
+    margin-left: 200px;
+    margin-top: 64px;
+    padding: 24px;
+    min-height: calc(100vh - 64px);
+    background: transparent; /* Let the blue gradient show through */
+    transition: margin-left 0.3s ease;
+    overflow-x: hidden;
+}
+
+/* Ensure content takes full width */
+.content .ant-layout-content {
+    width: 100%;
+}
+
+.content > div {
+    width: 100%;
+    max-width: none;
+}
+
+/* Logo styling */
+.logo {
+    margin: 40px 0;
+    font-size: 1.5rem;
+    text-align: center;
+    color: #1890ff;
+    font-weight: bold;
+}
+
+/* Handle collapsed sidebar state */
+.ant-layout-sider-collapsed + .ant-layout .header {
+    left: 80px;
+}
+
+.ant-layout-sider-collapsed + .ant-layout .content {
+    margin-left: 80px;
+}
+
+/* Ensure Ant Design cards and flex containers work properly */
+.ant-card {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.ant-card-body {
+    padding: 24px;
+}
+
+/* Fix for MainContent Flex layout */
+.main-content-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.stats-row {
+    display: flex;
+    gap: 24px;
+    width: 100%;
+}
+
+.stats-row .ant-card {
+    flex: 1;
+    min-width: 0; /* Prevents flex items from overflowing */
+}
+
+/* Banner specific styling */
+.banner-card {
+    width: 100% !important;
+    margin-bottom: 0;
+}
+
+.banner-card .ant-card-body {
+    padding: 24px;
+}
+
+/* Typography adjustments */
+.ant-typography h1 {
+    margin-bottom: 16px !important;
+    color: #262626;
+}
+
+.ant-typography {
+    color: #595959;
+}
+
+/* Button styling in banner */
+.banner-button {
+    margin-top: 16px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+    .content {
+        margin-left: 0;
+        padding: 16px;
+    }
+    
+    .header {
+        left: 0;
+    }
+    
+    .sider {
+        transform: translateX(-100%);
+    }
+    
+    .sider.ant-layout-sider-collapsed {
+        transform: translateX(-100%);
+    }
+    
+    .stats-row {
+        flex-direction: column;
+    }
+}
+
+/* Fix any z-index conflicts */
+.ant-layout-header {
+    z-index: 50;
+}
+
+.ant-layout-sider {
+    z-index: 100;
+}
+
+/* Smooth transitions */
+.ant-layout-sider,
+.ant-layout-header,
+.ant-layout-content {
+    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+}

@@ -4,12 +4,12 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import LandingPage from '../Components/LandingPage'
 import Questionnaire from '../Components/Questionnaire'
-
+import Dashboard from '../Components/Dashboard'
 function App() {
   
   return (
     <>
-      <Questionnaire/>
+      <Dashboard/>
     </>
   )
 }
